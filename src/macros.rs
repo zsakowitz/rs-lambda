@@ -44,7 +44,6 @@ macro_rules! lambda {
     [/]   => { __Slash };
     [*=]  => { __StarEq };
     [*]   => { __Star };
-    [_]   => { __Underscore };
     [~]   => { __Tilde };
 
     ($x:literal) => { ::paste::paste! { [< __ $x >] } };
@@ -63,6 +62,10 @@ macro_rules! lambda {
 
     ($x:tt @ $($rest:tt)*) => {
         $crate::lambda!({ <$crate::lambda!($x) as $crate::value::Value>::Reduce } $($rest)*)
+    };
+
+    ($x:tt | $($rest:tt)*) => {
+        $crate::lambda!({ <$crate::lambda!($x) as $crate::value::Value>::ReduceAlt } $($rest)*)
     };
 
     ($x:tt # $($rest:tt)*) => {
@@ -126,7 +129,6 @@ macro_rules! single_lambda {
     ($vis:vis type / = $x:tt)   => { $vis type __Slash = $crate::lambda!($x); };
     ($vis:vis type *= = $x:tt)  => { $vis type __StarEq = $crate::lambda!($x); };
     ($vis:vis type * = $x:tt)   => { $vis type __Star = $crate::lambda!($x); };
-    ($vis:vis type _ = $x:tt)   => { $vis type __Underscore = $crate::lambda!($x); };
     ($vis:vis type ~ = $x:tt)   => { $vis type __Tilde = $crate::lambda!($x); };
 
     ($vis:vis type $name:literal = $x:tt) => {
