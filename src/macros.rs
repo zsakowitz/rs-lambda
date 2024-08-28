@@ -76,6 +76,10 @@ macro_rules! lambda {
         $crate::value::Lambda<$param, $crate::lambda!($($body)+)>
     };
 
+    (? $param:ident $($body:tt)+) => {
+        $crate::value::Lambda<$param, $crate::lambda!($($body)+)>
+    };
+
     ($lhs:tt $rhs:tt $($rest:tt)*) => {
         $crate::lambda!(
             { $crate::value::Application<$crate::lambda!($lhs), $crate::lambda!($rhs)> }
